@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BlockService } from './block.service';
+import { BlockService } from '@/block/block.service';
 
 describe('BlockService', () => {
   let service: BlockService;
