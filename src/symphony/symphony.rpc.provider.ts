@@ -1,5 +1,5 @@
 import { createRPCQueryClient as symphonyRpcClient } from '@orchestra-labs/symphonyjs/osmosis/rpc.query';
-import { cosmos, osmosis } from '@orchestra-labs/symphonyjs';
+import { osmosis } from '@orchestra-labs/symphonyjs';
 import { StargateClient } from '@cosmjs/stargate';
 
 export const SymphonyRpcClientProvider = {

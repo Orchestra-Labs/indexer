@@ -16,4 +16,12 @@ export class SymphonyService {
   async getBlockNumber() {
     return await this.cosmosRpcClient.getHeight();
   }
+
+  async getMarketParams() {
+    return await this.symphonyRpcClient.osmosis.market.v1beta1.params();
+  }
+
+  async getExchangeRequirements() {
+    return await this.symphonyRpcClient.osmosis.market.v1beta1.exchangeRequirements();
+  }
 }
