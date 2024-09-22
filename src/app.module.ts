@@ -6,6 +6,7 @@ import { AppService } from '@/app.service';
 import { SymphonyModule } from './symphony/symphony.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ImporterModule } from './importer/importer.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ImporterModule } from './importer/importer.module';
     BlockModule,
     SymphonyModule,
     ImporterModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],
