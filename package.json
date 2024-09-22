@@ -21,11 +21,14 @@
   },
   "dependencies": {
     "@cosmjs/stargate": "^0.32.4",
+    "@nestjs/cache-manager": "^2.2.2",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
+    "@nestjs/event-emitter": "^2.0.4",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/schedule": "^4.1.1",
     "@orchestra-labs/symphonyjs": "^1.0.28",
+    "cache-manager": "^5.7.6",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },
