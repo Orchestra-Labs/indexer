@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ImporterService } from './importer.service';
 import { SymphonyModule } from '@/symphony/symphony.module';
-import { ExchangeParamsRepository } from '@/importer/exchange-params-repository.service';
 import { DatabaseModule } from '@/database/database.module';
+import { MarketParamsRepository } from '@/importer/market-params.repository.service';
 
 @Module({
-  providers: [ImporterService, ExchangeParamsRepository],
+  providers: [ImporterService, MarketParamsRepository],
   imports: [SymphonyModule, DatabaseModule],
 })
 export class ImporterModule {}

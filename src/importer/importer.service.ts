@@ -2,21 +2,27 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { SymphonyService } from '@/symphony/symphony.service';
 import { utf8Read } from '@orchestra-labs/symphonyjs';
+import { MarketParamsRepository } from '@/importer/market-params.repository.service';
 
 @Injectable()
 export class ImporterService {
   private readonly logger = new Logger(ImporterService.name);
 
-  constructor(private readonly symphonyService: SymphonyService) {}
+  constructor(
+    private readonly symphonyService: SymphonyService,
+    private readonly marketParamsRepo: MarketParamsRepository,
+  ) {}
 
   @OnEvent('block.new')
   async gatherMarketParams(blockHeight: number) {
     const marketParams = await this.symphonyService.getMarketParams();
     const exchangePoolValue = marketParams.params.exchangePool;
+    const exchangePool = this.decode(exchangePoolValue);
 
     this.logger.debug(
-      `Exchange pool value at ${blockHeight}: ${this.decode(exchangePoolValue)}`,
+      `Storing exchange pool value at ${blockHeight}: ${exchangePool}`,
     );
+    await this.marketParamsRepo.storeExchangeParams(exchangePool, blockHeight);
   }
 
   @OnEvent('block.new')

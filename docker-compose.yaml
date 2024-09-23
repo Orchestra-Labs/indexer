@@ -1,4 +1,20 @@
 services:
+  indexer:
+    restart: "unless-stopped"
+    stop_grace_period: 30s
+    build: .
+    ports:
+      - 5001:5001/tcp
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5001/healthz" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      default:
+        aliases:
+          - symphony-indexer
+
   postgres:
     restart: "unless-stopped"
     image: postgres:15-alpine
@@ -20,6 +36,6 @@ services:
     networks:
       default:
         aliases:
-          - cosmos-indexer
+          - symphony-indexer
 volumes:
   postgres:
