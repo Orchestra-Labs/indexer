@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { PG_CLIENT } from '@/database/database.provider';
 import { Client } from 'pg';
+import { MarketParams } from '@/importer/importer.model';
 
 @Injectable()
 export class MarketParamsRepository {
@@ -15,5 +16,17 @@ export class MarketParamsRepository {
     };
     await this.client.query(query);
     this.logger.debug(`Stored exchange params at height ${height}`);
+  }
+
+  async getMarketParams(
+    startDate: Date,
+    endDate: Date,
+  ): Promise<MarketParams[]> {
+    const query = {
+      text: 'SELECT * FROM market_params WHERE created_at >= $1 AND created_at <= $2',
+      values: [startDate, endDate],
+    };
+    const result = await this.client.query<MarketParams>(query);
+    return result.rows;
   }
 }

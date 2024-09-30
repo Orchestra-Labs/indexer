@@ -7,5 +7,6 @@ import { MarketParamsRepository } from '@/importer/market-params.repository.serv
 @Module({
   providers: [ImporterService, MarketParamsRepository],
   imports: [SymphonyModule, DatabaseModule],
+  exports: [MarketParamsRepository],
 })
 export class ImporterModule {}

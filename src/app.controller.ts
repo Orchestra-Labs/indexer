@@ -10,7 +10,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('healthz')
-  getHello(): HealthzResponse {
+  getHealthz(): HealthzResponse {
     return {
       isHealthy: true,
     };
