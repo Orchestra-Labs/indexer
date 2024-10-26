@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { createRPCQueryClient } from '@orchestra-labs/symphonyjs/osmosis/rpc.query';
 import { StargateClient } from '@cosmjs/stargate';
+import { QuerySupplyOfRequest } from '@orchestra-labs/symphonyjs/cosmos/bank/v1beta1/query';
 
 @Injectable()
 export class SymphonyService {
@@ -23,5 +24,16 @@ export class SymphonyService {
 
   async getExchangeRequirements() {
     return await this.symphonyRpcClient.osmosis.market.v1beta1.exchangeRequirements();
+  }
+
+  async getTaxRate() {
+    return await this.symphonyRpcClient.osmosis.treasury.v1beta1.taxRate();
+  }
+
+  async getSupplyOf(denom: string) {
+    const request = { denom: denom } as QuerySupplyOfRequest;
+    const response =
+      await this.symphonyRpcClient.cosmos.bank.v1beta1.supplyOf(request);
+    return response;
   }
 }

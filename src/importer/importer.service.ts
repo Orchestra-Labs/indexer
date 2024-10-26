@@ -2,7 +2,10 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { SymphonyService } from '@/symphony/symphony.service';
 import { utf8Read } from '@orchestra-labs/symphonyjs';
-import { MarketParamsRepository } from '@/importer/market-params.repository.service';
+import { MarketParamsRepository } from '@/importer/market-params.repository';
+import { TaxRateRepository } from '@/importer/tax-rate.repository';
+import { ExchangeRequirementsMapper } from '@/importer/mapper/exchange-requirements.mapper';
+import { ExchangeRequirementsRepository } from '@/importer/exchange-requirements.repository';
 
 @Injectable()
 export class ImporterService {
@@ -11,6 +14,8 @@ export class ImporterService {
   constructor(
     private readonly symphonyService: SymphonyService,
     private readonly marketParamsRepo: MarketParamsRepository,
+    private readonly taxRateRepo: TaxRateRepository,
+    private readonly exchangeRequirementsRepo: ExchangeRequirementsRepository,
   ) {}
 
   @OnEvent('block.new')
@@ -29,7 +34,25 @@ export class ImporterService {
   async gatherExchangeRequirements(blockHeight: number) {
     const exchangeRequirements =
       await this.symphonyService.getExchangeRequirements();
-    this.logger.debug(`Exchange requirements value: ${exchangeRequirements}`);
+    const models = ExchangeRequirementsMapper.normalize(exchangeRequirements);
+
+    // we store the exchange requirements in the database
+    await this.exchangeRequirementsRepo.storeExchangeRequirements(
+      models,
+      blockHeight,
+    );
+
+    this.logger.debug(`Stored exchange requirements at height ${blockHeight}`);
+  }
+
+  @OnEvent('block.new')
+  async gatherReserveFee(blockHeight: number) {
+    const taxRateResponse = await this.symphonyService.getTaxRate();
+    this.logger.debug(`Tax rate value: ${taxRateResponse.taxRate}`);
+    const taxRate = BigInt(taxRateResponse.taxRate);
+
+    // we store the tax rate in the database
+    await this.taxRateRepo.storeTaxRate(taxRate, blockHeight);
   }
 
   private decode(uint8array: Uint8Array): bigint {

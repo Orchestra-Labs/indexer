@@ -14,14 +14,14 @@ export class BlockService {
     private eventEmitter: EventEmitter2,
   ) {}
 
-  @Interval(1000)
+  @Interval(10000)
   async handleTick() {
     const savedBlockHeight = await this.lastRegistreredBlockHeight();
     const height = await this.symphonyService.getBlockNumber();
     if (height > savedBlockHeight) {
       this.logger.log(`New block height: ${height}`);
       await this.saveBlockHeight(height);
-      this.eventEmitter.emit('block.new', height);
+      await this.eventEmitter.emitAsync('block.new', height);
     }
   }
 

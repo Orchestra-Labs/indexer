@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { PG_CLIENT } from '@/database/database.provider';
 import { Client } from 'pg';
-import { MarketParams } from '@/importer/importer.model';
+import { MarketParams } from '@/importer/model/MarketParams';
 
 @Injectable()
 export class MarketParamsRepository {
